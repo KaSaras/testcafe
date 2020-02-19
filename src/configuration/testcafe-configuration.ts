@@ -22,6 +22,8 @@ import {
 
 import OptionSource from './option-source';
 import { Dictionary, FilterOption, ReporterOption, StaticContentCachingOptions } from './interfaces';
+import { RUNTIME_ERRORS } from '../errors/types';
+import { GeneralError } from '../errors/runtime';
 
 const CONFIGURATION_FILENAME = '.testcaferc.json';
 
@@ -61,8 +63,9 @@ interface TestCafeStartOptions {
 }
 
 export default class TestCafeConfiguration extends Configuration {
-    public constructor () {
-        super(CONFIGURATION_FILENAME);
+
+    public constructor (tcConfigPath: string = CONFIGURATION_FILENAME) {
+        super(tcConfigPath);
     }
 
     public async init (options = {}): Promise<void> {
@@ -200,5 +203,13 @@ export default class TestCafeConfiguration extends Configuration {
 
     public static get FILENAME (): string {
         return CONFIGURATION_FILENAME;
+    }
+
+    protected async _isConfigurationFileExists (): Promise<boolean> {
+        const fileExists = await super._isConfigurationFileExists();
+
+        if (!fileExists)
+            throw new GeneralError(RUNTIME_ERRORS.cannotFindTestCafeConfigurationFile, this.filePath);
+        return true;
     }
 }

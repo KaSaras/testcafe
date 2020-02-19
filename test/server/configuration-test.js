@@ -1,5 +1,4 @@
 /*eslint-disable no-console */
-const { cloneDeep } = require('lodash');
 const { expect }    = require('chai');
 const fs            = require('fs');
 const tmp           = require('tmp');
@@ -12,6 +11,7 @@ const consoleWrapper                          = require('./helpers/console-wrapp
 
 const tsConfigPath           = 'tsconfig.json';
 const customTSConfigFilePath = 'custom-config.json';
+const customTestCafeConfigFilePath = 'custom-testcaferc.json';
 
 const createConfigFile = (path, options) => {
     options = options || {};
@@ -268,14 +268,47 @@ describe('TestCafeConfiguration', () => {
             });
         });
 
-        it('File doesn\'t exists', () => {
+        it('Default File doesn\'t exist', () => {
             fs.unlinkSync(testCafeConfiguration.filePath);
-
-            const defaultOptions = cloneDeep(testCafeConfiguration._options);
 
             return testCafeConfiguration.init()
                 .then(() => {
-                    expect(testCafeConfiguration._options).to.deep.equal(defaultOptions);
+                    return Promise.reject('File was found when it shouldn\'t exist');
+                }, (rej) => {
+                    expect(rej.message).contains('Unable to find the TestCafe configuration file in');
+                });
+        });
+
+        it('Custom TestCafe config', () => {
+            const options = {
+                browsers:    'chrome',
+                src:         'path1/folder',
+                concurrency: 1
+            };
+
+            createConfigFile(customTestCafeConfigFilePath, {
+                options,
+            });
+
+            const configuration = new TestCafeConfiguration(customTestCafeConfigFilePath);
+
+            return configuration.init().then(() => {
+                fs.unlinkSync(configuration.filePath);
+
+                expect(configuration.getOptions().options.src).eql(options.src);
+                expect(configuration.getOptions().options.browsers).eql(options.browsers);
+                expect(configuration.getOptions().options.concurrency).eql(options.concurrency);
+            });
+        });
+
+        it('TestCafe custom configuration file does not exist', () => {
+            const configuration = new TestCafeConfiguration(customTestCafeConfigFilePath);
+
+            return configuration.init()
+                .then(() => {
+                    return Promise.reject('File was found when it shouldn\'t exist');
+                }, (rej) => {
+                    expect(rej.message).contains('Unable to find the TestCafe configuration file in');
                 });
         });
     });

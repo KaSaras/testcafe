@@ -90,5 +90,6 @@ export default {
     [RUNTIME_ERRORS.clientScriptInitializerMultipleContentSources]:      'You cannot combine the file path, module name and script content when you specify a client script to inject.',
     [RUNTIME_ERRORS.clientScriptModuleEntryPointPathCalculationError]:   'An error occurred when trying to locate the injected client script module:\n\n{errorMessage}.',
     [RUNTIME_ERRORS.cannotUseAllowMultipleWindowsOptionForLegacyTests]:  'You cannot run Legacy API tests in multi-window mode.',
-    [RUNTIME_ERRORS.cannotUseAllowMultipleWindowsOptionForSomeBrowsers]: 'You cannot use multi-window mode in {browsers}.'
+    [RUNTIME_ERRORS.cannotUseAllowMultipleWindowsOptionForSomeBrowsers]: 'You cannot use multi-window mode in {browsers}.',
+    [RUNTIME_ERRORS.cannotFindTestCafeConfigurationFile]:                'Unable to find the TestCafe configuration file in "{filePath}"'
 };

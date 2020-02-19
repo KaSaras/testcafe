@@ -39,7 +39,7 @@ async function getValidPort (port) {
 
 // API
 async function getConfiguration (args) {
-    const configuration = new TestCafeConfiguration();
+    const configuration = new TestCafeConfiguration(args[0].configPath);
 
     if (args.length === 1 && typeof args[0] === 'object')
         await configuration.init(args[0]);

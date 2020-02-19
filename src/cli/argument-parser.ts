@@ -136,6 +136,7 @@ export default class CLIArgumentParser {
             .option('--disable-page-reloads', 'disable page reloads between tests')
             .option('--disable-screenshots', 'disable screenshots')
             .option('--screenshots-full-page', 'enable full-page screenshots')
+            .option('--config-path <path>', 'use a custom TestCafe configuration file and specify its location')
 
             // NOTE: these options will be handled by chalk internally
             .option('--color', 'force colors in command line')

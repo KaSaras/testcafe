@@ -582,7 +582,7 @@ describe('CLI argument parser', function () {
     });
 
     it('Should parse command line arguments', function () {
-        return parse('-r list -S -q -e --hostname myhost --proxy localhost:1234 --proxy-bypass localhost:5678 --qr-code --app run-app --speed 0.5 --debug-on-fail --disable-page-reloads --dev --sf --disable-page-caching ie test/server/data/file-list/file-1.js')
+        return parse('-r list -S -q -e --hostname myhost --proxy localhost:1234 --proxy-bypass localhost:5678 --qr-code --app run-app --speed 0.5 --debug-on-fail --disable-page-reloads --dev --sf --disable-page-caching ie test/server/data/file-list/file-1.js --config-path test/server/data/testcafe-configs/config.json')
             .then(parser => {
                 expect(parser.opts.browsers).eql(['ie']);
                 expect(parser.opts.src).eql(['test/server/data/file-list/file-1.js']);
@@ -604,6 +604,7 @@ describe('CLI argument parser', function () {
                 expect(parser.opts.debugOnFail).to.be.ok;
                 expect(parser.opts.stopOnFirstFail).to.be.ok;
                 expect(parser.opts.disablePageCaching).to.be.ok;
+                expect(parser.opts.configPath).eql('test/server/data/testcafe-configs/config.json');
             });
     });
 
@@ -655,7 +656,8 @@ describe('CLI argument parser', function () {
             { long: '--disable-screenshots' },
             { long: '--screenshots-full-page' },
             { long: '--allow-multiple-windows', short: '-m' },
-            { long: '--experimental-compiler-service' }
+            { long: '--experimental-compiler-service' },
+            { long: '--config-path' },
         ];
 
         const parser  = new CliArgumentParser('');
